@@ -1,46 +1,67 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 import math
+import sympy as sp
 
-def f(t, u):
-    y1 = u[0]
-    y2 = u[1]
-    return np.array([y1 - y1 * y2, -y2 + y1 * y2])
+# Returns the derivative of the given functions as a column vector (dt/dt, dy1/dt, dy2/dt)
+def get_derivative(U: list) -> list:
+    y1 = U[1]
+    y2 = U[2]
+    deriv = np.array([1, y1 - y1 * y2, -y2 + y1 * y2])
+    return deriv
+
+# Initial condition for the Cauchy problem in the format (t0, y1, y2)
+def get_start_condition() -> list:
+    return np.array([0, 2, 2])
+
+# Solves the system of differential equations using the Adams method
+def calculate_adams_trajectory(start_condition: list, start: float, end: float, step_size: float) -> list:
+    trajectory = []
+    k0 = start_condition
+    k1 = start_condition
+    k2 = start_condition
+    num_steps = int((end - start) / step_size)
+    for _ in range(num_steps):
+        f2 = get_derivative(k2)
+        f1 = get_derivative(k1)
+        f0 = get_derivative(k0)
+        k3 = k2 + step_size * (23.0/12 * f2 - 16.0/12 * f1 + 5.0/12 * f0)
+        trajectory.append(k2)
+        k0 = k1
+        k1 = k2
+        k2 = k3
+    return trajectory
 
 def main():
-    h = 10**-4
-    l = 0
-    r = 10
-    t = np.arange(l, r, h)
-    n = len(t)
-    u = Solve(t, n, h, f, [2, 2])
-    plt.figure(figsize=(13.5, 6.3))
-    plt.subplot(1, 2, 1)
-    plt.plot(t, [u[i][0] for i in range(n)])
-    plt.title("y1(t)")
-    plt.tight_layout()
-    plt.grid()
-    plt.subplot(1, 2, 2)
-    plt.plot(t, [u[i][1] for i in range(n)])
-    plt.title("y2(t)")
-    plt.tight_layout()
+    # Set up the plot
+    plt.figure(figsize=(8, 6))
+    plt.title("Solving a system of differential equations using the Adams method:")
+
+    # Define the parameters of the problem
+    start = 0
+    end = 10
+    step_size = 0.1
+
+    # Calculate the solution using the Adams method
+    adams_values = calculate_adams_trajectory(get_start_condition(), start, end, step_size)
+
+    # Extract the y1 and y2 values from the solution
+    y1_values = []
+    y2_values = []
+    for value in adams_values:
+        y1_values.append(value[1])
+        y2_values.append(value[2])
+
+    # Plot the solution
+    plt.plot(np.linspace(start, end, len(y1_values)), y1_values, 'b', label="y1")
+    plt.plot(np.linspace(start, end, len(y2_values)), y2_values, 'g', label="y2")
+
+    # Add labels and show the plot
+    plt.xlabel("t")
+    plt.ylabel("y")
+    plt.legend()
     plt.grid()
     plt.show()
-
-def Solve(t, n, h, f, u0):
-    u = [u0]
-    N = len(u0)
-    for i in range(2):
-        u.append([u[i][I] + h * f(t[i], u[i])[I] for I in range(N)])
-    for i in range(n - 3):
-        u.append(Next(u[-3], u[-2], u[-1], t[i], t[i + 1], t[i + 2], h, f, N))
-    return u
-
-def Next(u__, u_, u, t__, t_, t, h, F, N):
-    f__ = F(t__, u__)
-    f_ = F(t_, u_)
-    f = F(t, u)
-    return [u_[I] + h * (23 * f[I] / 12 - 16 * f_[I] / 12 + 5 * f__[I] / 12) for I in range(N)]
 
 if __name__ == "__main__":
     main()
