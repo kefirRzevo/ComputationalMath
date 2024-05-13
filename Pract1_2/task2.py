@@ -129,7 +129,7 @@ def main():
     plt.xlabel('Number of nodes n')
     plt.ylabel('Error, %')
     plt.grid()
-    plt.savefig(os.path.join(os.path.dirname(__file__), 'Gauss.png'))
+    plt.savefig(os.path.join(os.path.dirname(__file__), 'res/Gauss.png'))
     plt.show()
 
 if __name__ == '__main__':

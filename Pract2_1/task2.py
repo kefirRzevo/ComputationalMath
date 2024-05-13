@@ -169,7 +169,7 @@ plt.show()
 # df['x'] = X
 # df['y'] = Y
 # df.head()
-# dataPath = os.path.join(os.path.dirname(__file__), 'dataset.csv')
+# dataPath = os.path.join(os.path.dirname(__file__), 'res/dataset.csv')
 # df.to_csv(dataPath, index = False)
 
 # df = pd.DataFrame()

@@ -70,7 +70,7 @@ def main1():
 
     plt.grid()
     plt.legend()
-    plt.savefig(os.path.join(os.path.dirname(__file__), 'Lagrange.png'))
+    plt.savefig(os.path.join(os.path.dirname(__file__), 'res/Lagrange.png'))
     plt.show()
 
 # Finds the divided difference F(tk, ... tn)
@@ -178,7 +178,7 @@ def main2():
 
     plt.grid()
     plt.legend()
-    plt.savefig(os.path.join(os.path.dirname(__file__), 'NewtonWithCheb.png'))
+    plt.savefig(os.path.join(os.path.dirname(__file__), 'res/NewtonWithCheb.png'))
     plt.show()
 
 if __name__ == '__main__':
