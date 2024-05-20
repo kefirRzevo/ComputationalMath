@@ -125,7 +125,6 @@ def main():
   while(t_passed < T):
     A0 = matrix_A(u_prev[0])
     u_next[0] = u_prev[0] - sigma * np.dot(A0, u_prev[1] - u_prev[0])
-    u_next[0] = u_prev[0]
     for m in range(1, M-1):
       L = matrix_L(u_prev[m])
       while (tau * abs(L.max()) / h > 1):
@@ -138,7 +137,6 @@ def main():
       lhs = np.dot(A, u_prev[m+1] - u_prev[m-1])
       rhs = np.dot(np.dot(np.dot(omega_inv, abs(L)), omega), u_prev[m+1] - 2 * u_prev[m] + u_prev[m-1])
       u_next[m] = u_prev[m] - (lhs - rhs) * sigma / 2
-    u_next[M-1] = u_prev[M-1]
     AM = matrix_A(u_prev[M-1])
     u_next[M-1] = u_prev[M-1] - sigma * np.dot(AM, u_prev[M-1] - u_prev[M-2])
     ax.plot(getX(), getR(u_next), c='blue')
